@@ -1,4 +1,4 @@
-# Modern FullStack Web App Developer Course
+# Modern Web App Developer Course
 
 
 ### **Phase 1: Computer Fundamentals and Internet Basics**
