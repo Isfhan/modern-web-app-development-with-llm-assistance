@@ -1,4 +1,4 @@
-# Modern Web App Developer Course
+# Learn Modern Web App Development with LLM Assistance
 
 
 ### **Phase 1: Computer Fundamentals and Internet Basics**
