@@ -1,4 +1,4 @@
-# Modern-Web-App-Developer-Course
+# Modern WebApp Developer Course
 
 
 ### **Phase 1: Computer Fundamentals and Internet Basics**
