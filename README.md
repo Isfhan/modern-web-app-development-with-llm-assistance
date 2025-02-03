@@ -1,6 +1,6 @@
 # Modern Web App Development with LLM Assistance
 
-![image](https://github.com/user-attachments/assets/e2c72b63-5049-400f-8fde-e174c0aec265)
+![image](https://github.com/user-attachments/assets/1dfd0edb-1b09-4e93-a652-41b5fca1a498)
 
 ### **Phase 1: Computer Fundamentals and Internet Basics**
 
