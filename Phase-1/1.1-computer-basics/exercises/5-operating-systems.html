@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operating Systems Basics (آپریٹنگ سسٹم کی بنیادی باتیں)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .os-section {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .os-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .os-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .os-icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 15px;
+        }
+        .os-details {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .feature-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .feature-list li {
+            margin: 10px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+        .feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+        }
+        .instructions {
+            background-color: #e1f5fe;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .quiz-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff3cd;
+            border-radius: 5px;
+        }
+        .quiz-question {
+            margin: 15px 0;
+        }
+        .quiz-options label {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .quiz-options label:hover {
+            background-color: #e1f5fe;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">Operating Systems Basics (آپریٹنگ سسٹم کی بنیادی باتیں)</h1>
+
+        <div class="instructions" id="instructions">
+            <h2>Instructions (ہدایات):</h2>
+            <p>Learn about different operating systems and their basic features. Click on each OS to learn more.</p>
+            <p>مختلف آپریٹنگ سسٹمز اور ان کی بنیادی خصوصیات کے بارے میں جانیں۔ مزید جاننے کے لیے ہر آپریٹنگ سسٹم پر کلک کریں۔</p>
+        </div>
+
+        <div class="os-section">
+            <div class="os-card" onclick="toggleDetails('windows')">
+                <h2>🪟 Windows (ونڈوز)</h2>
+                <div class="os-details" id="windows-details">
+                    <ul class="feature-list">
+                        <li>Most commonly used operating system (سب سے زیادہ استعمال ہونے والا آپریٹنگ سسٹم)</li>
+                        <li>User-friendly interface (صارف دوست انٹرفیس)</li>
+                        <li>Wide software compatibility (وسیع سافٹ ویئر مطابقت)</li>
+                        <li>Regular updates and security features (باقاعدہ اپ ڈیٹس اور سیکیورٹی فیچرز)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="os-card" onclick="toggleDetails('mac')">
+                <h2>🍎 macOS (میک او ایس)</h2>
+                <div class="os-details" id="mac-details">
+                    <ul class="feature-list">
+                        <li>Apple's operating system (ایپل کا آپریٹنگ سسٹم)</li>
+                        <li>Sleek design and smooth performance (خوبصورت ڈیزائن اور بہترین کارکردگی)</li>
+                        <li>Built-in security features (بلٹ ان سیکیورٹی فیچرز)</li>
+                        <li>Integration with other Apple devices (دیگر ایپل ڈیوائسز کے ساتھ مربوط)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="os-card" onclick="toggleDetails('linux')">
+                <h2>🐧 Linux (لینکس)</h2>
+                <div class="os-details" id="linux-details">
+                    <ul class="feature-list">
+                        <li>Free and open-source (مفت اور اوپن سورس)</li>
+                        <li>High security and stability (زیادہ سیکیورٹی اور استحکام)</li>
+                        <li>Many different distributions (مختلف ڈسٹریبیوشنز)</li>
+                        <li>Great for programming (پروگرامنگ کے لیے بہترین)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-section">
+            <h2 id="quiz-title">Quick Quiz (فوری کوئز)</h2>
+            <div class="quiz-question">
+                <p id="question">Which operating system is most commonly used worldwide?</p>
+                <div class="quiz-options">
+                    <label>
+                        <input type="radio" name="os" value="windows"> Windows (ونڈوز)
+                    </label>
+                    <label>
+                        <input type="radio" name="os" value="mac"> macOS (میک او ایس)
+                    </label>
+                    <label>
+                        <input type="radio" name="os" value="linux"> Linux (لینکس)
+                    </label>
+                </div>
+                <button onclick="checkAnswer()">Submit Answer (جواب جمع کریں)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let currentQuestionIndex = 0;
+
+        const questions = [
+            {
+                en: "Which operating system is most commonly used worldwide?",
+                ur: "دنیا بھر میں سب سے زیادہ استعمال ہونے والا آپریٹنگ سسٹم کون سا ہے؟",
+                answer: "windows"
+            },
+            {
+                en: "Which operating system is developed by Apple?",
+                ur: "کون سا آپریٹنگ سسٹم ایپل نے تیار کیا ہے؟",
+                answer: "mac"
+            },
+            {
+                en: "Which operating system is free and open-source?",
+                ur: "کون سا آپریٹنگ سسٹم مفت اور اوپن سورس ہے؟",
+                answer: "linux"
+            }
+        ];
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const title = document.getElementById('title');
+            const question = document.getElementById('question');
+            
+            if (isEnglish) {
+                title.innerHTML = 'Operating Systems Basics (آپریٹنگ سسٹم کی بنیادی باتیں)';
+                question.textContent = questions[currentQuestionIndex].en;
+            } else {
+                title.innerHTML = 'آپریٹنگ سسٹم کی بنیادی باتیں';
+                question.textContent = questions[currentQuestionIndex].ur;
+            }
+        }
+
+        function toggleDetails(os) {
+            const details = document.getElementById(`${os}-details`);
+            const currentDisplay = details.style.display;
+            details.style.display = currentDisplay === 'block' ? 'none' : 'block';
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="os"]:checked');
+            if (!selected) {
+                alert(isEnglish ? 'Please select an answer!' : '!براہ کرم ایک جواب منتخب کریں');
+                return;
+            }
+
+            if (selected.value === questions[currentQuestionIndex].answer) {
+                alert(isEnglish ? 'Correct! Well done!' : '!درست! شاباش');
+                currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+                updateLanguage();
+                // Reset radio buttons
+                document.querySelectorAll('input[name="os"]').forEach(radio => radio.checked = false);
+            } else {
+                alert(isEnglish ? 'Try again!' : '!دوبارہ کوشش کریں');
+            }
+        }
+
+        // Initial setup
+        updateLanguage();
+    </script>
+</body>
+</html> 

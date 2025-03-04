@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Management Practice (فائل مینجمنٹ پریکٹس)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .file-system {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 300px;
+        }
+        .folder {
+            background-color: #fff3cd;
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .file {
+            background-color: #e1f5fe;
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .instructions {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .task {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .folder-icon::before {
+            content: "📁";
+            margin-right: 5px;
+        }
+        .file-icon::before {
+            content: "📄";
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">File Management Practice (فائل مینجمنٹ پریکٹس)</h1>
+
+        <div class="instructions" id="instructions">
+            <h2>Instructions (ہدایات):</h2>
+            <p>Practice organizing files and folders. Follow the tasks below.</p>
+            <p>فائلوں اور فولڈرز کو منظم کرنے کی مشق کریں۔ نیچے دیے گئے کاموں کی پیروی کریں۔</p>
+        </div>
+
+        <div class="task" id="currentTask">
+            <h3>Current Task (موجودہ کام):</h3>
+            <p id="taskDescription">Create a new folder named "Documents"</p>
+        </div>
+
+        <div class="file-system" id="fileSystem">
+            <!-- Files and folders will be added here dynamically -->
+        </div>
+
+        <div class="controls">
+            <button onclick="createFolder()">Create Folder / فولڈر بنائیں</button>
+            <button onclick="createFile()">Create File / فائل بنائیں</button>
+            <button onclick="deleteItem()">Delete / حذف کریں</button>
+            <button onclick="nextTask()">Next Task / اگلا کام</button>
+        </div>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let currentTaskIndex = 0;
+
+        const tasks = [
+            {
+                en: "Create a new folder named 'Documents'",
+                ur: "'Documents' کے نام سے ایک نیا فولڈر بنائیں",
+                check: (fileSystem) => fileSystem.querySelector('.folder[data-name="Documents"]')
+            },
+            {
+                en: "Create a file named 'notes.txt' inside the Documents folder",
+                ur: "'Documents' فولڈر میں 'notes.txt' کے نام سے ایک فائل بنائیں",
+                check: (fileSystem) => fileSystem.querySelector('.file[data-name="notes.txt"]')
+            },
+            {
+                en: "Create a new folder named 'Pictures'",
+                ur: "'Pictures' کے نام سے ایک نیا فولڈر بنائیں",
+                check: (fileSystem) => fileSystem.querySelector('.folder[data-name="Pictures"]')
+            }
+        ];
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const title = document.getElementById('title');
+            const instructions = document.getElementById('instructions');
+            const taskDesc = document.getElementById('taskDescription');
+            
+            if (isEnglish) {
+                title.innerHTML = 'File Management Practice (فائل مینجمنٹ پریکٹس)';
+                taskDesc.textContent = tasks[currentTaskIndex].en;
+            } else {
+                title.innerHTML = 'فائل مینجمنٹ پریکٹس';
+                taskDesc.textContent = tasks[currentTaskIndex].ur;
+            }
+        }
+
+        function createFolder() {
+            const name = prompt(isEnglish ? 'Enter folder name:' : 'فولڈر کا نام درج کریں:');
+            if (name) {
+                const folder = document.createElement('div');
+                folder.className = 'folder folder-icon';
+                folder.textContent = name;
+                folder.setAttribute('data-name', name);
+                document.getElementById('fileSystem').appendChild(folder);
+                checkTask();
+            }
+        }
+
+        function createFile() {
+            const name = prompt(isEnglish ? 'Enter file name:' : 'فائل کا نام درج کریں:');
+            if (name) {
+                const file = document.createElement('div');
+                file.className = 'file file-icon';
+                file.textContent = name;
+                file.setAttribute('data-name', name);
+                document.getElementById('fileSystem').appendChild(file);
+                checkTask();
+            }
+        }
+
+        function deleteItem() {
+            const name = prompt(isEnglish ? 'Enter name to delete:' : 'حذف کرنے کے لیے نام درج کریں:');
+            if (name) {
+                const items = document.querySelectorAll(`[data-name="${name}"]`);
+                items.forEach(item => item.remove());
+            }
+        }
+
+        function checkTask() {
+            const fileSystem = document.getElementById('fileSystem');
+            if (tasks[currentTaskIndex].check(fileSystem)) {
+                alert(isEnglish ? 'Good job! Task completed!' : '!شاباش! کام مکمل ہو گیا');
+            }
+        }
+
+        function nextTask() {
+            currentTaskIndex = (currentTaskIndex + 1) % tasks.length;
+            updateLanguage();
+        }
+
+        // Initial setup
+        updateLanguage();
+    </script>
+</body>
+</html> 

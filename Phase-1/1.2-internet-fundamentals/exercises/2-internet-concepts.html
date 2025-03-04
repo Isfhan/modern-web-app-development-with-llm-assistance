@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Concepts (انٹرنیٹ کے بنیادی تصورات)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .concept-card {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .concept-title {
+            font-size: 1.5em;
+            color: #2196F3;
+            margin-bottom: 15px;
+        }
+        .concept-content {
+            margin-bottom: 20px;
+        }
+        .interactive-demo {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            margin: 15px 0;
+        }
+        .animation-container {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #28a745;
+            transition: width 0.3s ease;
+        }
+        .quiz-container {
+            margin-top: 20px;
+        }
+        .quiz-option {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            background-color: #f0f0f0;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .dns-animation, .http-animation {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .active-animation {
+            display: block;
+        }
+        .browser-engines {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .engine-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .devtools-demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .devtools-section {
+            margin: 10px 0;
+        }
+        .compatibility-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .compatibility-table th, .compatibility-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .compatibility-table th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">Internet Concepts (انٹرنیٹ کے بنیادی تصورات)</h1>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+        </div>
+
+        <div class="concept-card" id="dns-section">
+            <div class="concept-title" id="dns-title">DNS (Domain Name System)</div>
+            <div class="concept-content" id="dns-content">
+                The Domain Name System (DNS) is like a phone book for the internet. It converts website names into IP addresses.
+            </div>
+            <div class="interactive-demo">
+                <div class="animation-container">
+                    <div class="dns-animation active-animation" id="dns-animation">
+                        <!-- DNS animation will be added via JavaScript -->
+                    </div>
+                </div>
+                <button onclick="demonstrateDNS()" id="dns-demo-btn">Show DNS Process</button>
+            </div>
+        </div>
+
+        <div class="concept-card" id="http-section">
+            <div class="concept-title" id="http-title">HTTP/HTTPS</div>
+            <div class="concept-content" id="http-content">
+                HTTP (Hypertext Transfer Protocol) is how web browsers and servers communicate. HTTPS adds security through encryption.
+            </div>
+            <div class="interactive-demo">
+                <div class="animation-container">
+                    <div class="http-animation" id="http-animation">
+                        <!-- HTTP/HTTPS animation will be added via JavaScript -->
+                    </div>
+                </div>
+                <button onclick="demonstrateHTTP()" id="http-demo-btn">Show HTTP vs HTTPS</button>
+            </div>
+        </div>
+
+        <div class="concept-card" id="client-server-section">
+            <div class="concept-title" id="client-server-title">Client-Server Architecture</div>
+            <div class="concept-content" id="client-server-content">
+                The internet works on a client-server model. Your device (client) requests information from servers that host websites and services.
+            </div>
+            <div class="interactive-demo">
+                <div class="animation-container">
+                    <div id="client-server-animation">
+                        <!-- Client-Server animation will be added via JavaScript -->
+                    </div>
+                </div>
+                <button onclick="demonstrateClientServer()" id="client-server-btn">Show Client-Server Process</button>
+            </div>
+        </div>
+
+        <div class="concept-card" id="browser-section">
+            <div class="concept-title" id="browser-title">Web Browsers</div>
+            <div class="concept-content" id="browser-content">
+                Web browsers are programs that let you access websites. They use different engines to display web content.
+            </div>
+            
+            <h3>Browser Engines</h3>
+            <div class="browser-engines" id="browser-engines">
+                <!-- Browser engines will be populated via JavaScript -->
+            </div>
+
+            <h3>Developer Tools</h3>
+            <div class="devtools-demo">
+                <div class="devtools-section">
+                    <h4>Elements Panel</h4>
+                    <p>Inspect and modify HTML/CSS</p>
+                </div>
+                <div class="devtools-section">
+                    <h4>Console</h4>
+                    <p>JavaScript debugging and messages</p>
+                </div>
+                <div class="devtools-section">
+                    <h4>Network</h4>
+                    <p>Monitor web requests and performance</p>
+                </div>
+            </div>
+
+            <h3>Cross-browser Compatibility</h3>
+            <table class="compatibility-table">
+                <tr>
+                    <th>Feature</th>
+                    <th>Chrome</th>
+                    <th>Firefox</th>
+                    <th>Safari</th>
+                </tr>
+                <tr>
+                    <td>HTML5</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>CSS Grid</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>WebP Images</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+            </table>
+
+            <div class="quiz-container">
+                <div id="browser-quiz"></div>
+                <div class="feedback" id="quiz-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let currentProgress = 0;
+        const sectionCompletion = {
+            dns: false,
+            http: false,
+            clientServer: false,
+            browser: false
+        };
+
+        const content = {
+            en: {
+                title: "Internet Concepts (انٹرنیٹ کے بنیادی تصورات)",
+                dns: {
+                    title: "DNS (Domain Name System)",
+                    content: "The Domain Name System (DNS) is like a phone book for the internet. It converts website names into IP addresses.",
+                    demoButton: "Show DNS Process"
+                },
+                http: {
+                    title: "HTTP/HTTPS",
+                    content: "HTTP (Hypertext Transfer Protocol) is how web browsers and servers communicate. HTTPS adds security through encryption.",
+                    demoButton: "Show HTTP vs HTTPS"
+                },
+                clientServer: {
+                    title: "Client-Server Architecture",
+                    content: "The internet works on a client-server model. Your device (client) requests information from servers that host websites and services.",
+                    demoButton: "Show Client-Server Process"
+                },
+                browser: {
+                    title: "Web Browsers",
+                    content: "Web browsers are programs that let you access websites. They use different engines to display web content.",
+                    engines: [
+                        { name: "Chromium (Blink)", browsers: "Chrome, Edge, Opera" },
+                        { name: "Gecko", browsers: "Firefox" },
+                        { name: "WebKit", browsers: "Safari" }
+                    ],
+                    quiz: {
+                        question: "Which tool would you use to inspect HTML elements?",
+                        options: [
+                            "Network Panel",
+                            "Elements Panel",
+                            "Console Panel",
+                            "Performance Panel"
+                        ],
+                        correctIndex: 1,
+                        feedback: {
+                            correct: "Correct! The Elements panel is used to inspect and modify HTML/CSS.",
+                            incorrect: "Try again! Elements panel is the right tool for inspecting HTML."
+                        }
+                    }
+                }
+            },
+            ur: {
+                title: "انٹرنیٹ کے بنیادی تصورات",
+                dns: {
+                    title: "ڈی این ایس (ڈومین نیم سسٹم)",
+                    content: "ڈومین نیم سسٹم انٹرنیٹ کے لیے فون بک کی طرح ہے۔ یہ ویب سائٹ کے ناموں کو آئی پی ایڈریس میں تبدیل کرتا ہے۔",
+                    demoButton: "ڈی این ایس کا عمل دکھائیں"
+                },
+                http: {
+                    title: "ایچ ٹی ٹی پی/ایچ ٹی ٹی پی ایس",
+                    content: "ایچ ٹی ٹی پی وہ طریقہ ہے جس سے ویب براؤزر اور سرور بات چیت کرتے ہیں۔ ایچ ٹی ٹی پی ایس انکرپشن کے ذریعے سیکیورٹی شامل کرتا ہے۔",
+                    demoButton: "ایچ ٹی ٹی پی بمقابلہ ایچ ٹی ٹی پی ایس"
+                },
+                clientServer: {
+                    title: "کلائنٹ-سرور آرکیٹیکچر",
+                    content: "انٹرنیٹ کلائنٹ-سرور ماڈل پر کام کرتا ہے۔ آپ کا آلہ (کلائنٹ) ویب سائٹس اور سروسز کی میزبانی کرنے والے سرورز سے معلومات کی درخواست کرتا ہے۔",
+                    demoButton: "کلائنٹ-سرور کا عمل دکھائیں"
+                },
+                browser: {
+                    title: "ویب براؤزرز",
+                    content: "ویب براؤزرز وہ پروگرام ہیں جو آپ کو ویب سائٹس تک رسائی دیتے ہیں۔ وہ ویب مواد دکھانے کے لیے مختلف انجن استعمال کرتے ہیں۔",
+                    engines: [
+                        { name: "کرومیم (بلنک)", browsers: "کروم، ایج، اوپیرا" },
+                        { name: "جیکو", browsers: "فائر فاکس" },
+                        { name: "ویب کٹ", browsers: "سفاری" }
+                    ],
+                    quiz: {
+                        question: "HTML عناصر کی جانچ کے لیے آپ کون سا ٹول استعمال کریں گے؟",
+                        options: [
+                            "نیٹ ورک پینل",
+                            "ایلیمنٹس پینل",
+                            "کنسول پینل",
+                            "پرفارمنس پینل"
+                        ],
+                        correctIndex: 1,
+                        feedback: {
+                            correct: "درست! ایلیمنٹس پینل HTML/CSS کی جانچ اور ترمیم کے لیے استعمال ہوتا ہے۔",
+                            incorrect: "دوبارہ کوشش کریں! HTML کی جانچ کے لیے ایلیمنٹس پینل درست ٹول ہے۔"
+                        }
+                    }
+                }
+            }
+        };
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateContent();
+        }
+
+        function updateContent() {
+            const lang = isEnglish ? content.en : content.ur;
+            
+            document.getElementById('title').innerHTML = lang.title;
+            
+            // Update DNS section
+            document.getElementById('dns-title').textContent = lang.dns.title;
+            document.getElementById('dns-content').textContent = lang.dns.content;
+            document.getElementById('dns-demo-btn').textContent = lang.dns.demoButton;
+            
+            // Update HTTP section
+            document.getElementById('http-title').textContent = lang.http.title;
+            document.getElementById('http-content').textContent = lang.http.content;
+            document.getElementById('http-demo-btn').textContent = lang.http.demoButton;
+            
+            // Update Client-Server section
+            document.getElementById('client-server-title').textContent = lang.clientServer.title;
+            document.getElementById('client-server-content').textContent = lang.clientServer.content;
+            document.getElementById('client-server-btn').textContent = lang.clientServer.demoButton;
+            
+            // Update Browser section
+            document.getElementById('browser-title').textContent = lang.browser.title;
+            document.getElementById('browser-content').textContent = lang.browser.content;
+            
+            // Update Browser Engines
+            const enginesContainer = document.getElementById('browser-engines');
+            enginesContainer.innerHTML = lang.browser.engines.map(engine => `
+                <div class="engine-card">
+                    <h4>${engine.name}</h4>
+                    <p>${engine.browsers}</p>
+                </div>
+            `).join('');
+            
+            // Update quiz
+            updateQuiz();
+        }
+
+        function updateQuiz() {
+            const quiz = isEnglish ? content.en.browser.quiz : content.ur.browser.quiz;
+            const quizContainer = document.getElementById('browser-quiz');
+            quizContainer.innerHTML = `
+                <h3>${quiz.question}</h3>
+                ${quiz.options.map((option, index) => `
+                    <div class="quiz-option" onclick="checkAnswer(${index})">${option}</div>
+                `).join('')}
+            `;
+        }
+
+        function checkAnswer(index) {
+            const quiz = isEnglish ? content.en.browser.quiz : content.ur.browser.quiz;
+            const feedback = document.getElementById('quiz-feedback');
+            
+            if (index === quiz.correctIndex) {
+                feedback.textContent = quiz.feedback.correct;
+                feedback.className = 'feedback correct';
+                if (!sectionCompletion.browser) {
+                    sectionCompletion.browser = true;
+                    updateProgress();
+                }
+            } else {
+                feedback.textContent = quiz.feedback.incorrect;
+                feedback.className = 'feedback incorrect';
+            }
+            feedback.style.display = 'block';
+        }
+
+        function demonstrateDNS() {
+            const animation = document.getElementById('dns-animation');
+            animation.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div style="margin: 10px;">Step 1: You type www.example.com 🖥️</div>
+                    <div style="margin: 10px;">⬇️</div>
+                    <div style="margin: 10px;">Step 2: Browser asks DNS Server 🔍</div>
+                    <div style="margin: 10px;">⬇️</div>
+                    <div style="margin: 10px;">Step 3: DNS Server responds with IP: 93.184.216.34 📍</div>
+                    <div style="margin: 10px;">⬇️</div>
+                    <div style="margin: 10px;">Step 4: Browser connects to the IP address ✅</div>
+                </div>
+            `;
+            if (!sectionCompletion.dns) {
+                sectionCompletion.dns = true;
+                updateProgress();
+            }
+        }
+
+        function demonstrateHTTP() {
+            const animation = document.getElementById('http-animation');
+            animation.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div style="margin: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <strong>HTTP (Unsecure)</strong><br>
+                        Browser 📱 ⟷ Anyone can see data ⟷ Server 🖥️
+                    </div>
+                    <div style="margin: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #e8f5e9;">
+                        <strong>HTTPS (Secure)</strong><br>
+                        Browser 📱 🔒 Encrypted data 🔒 Server 🖥️
+                    </div>
+                </div>
+            `;
+            animation.style.display = 'block';
+            if (!sectionCompletion.http) {
+                sectionCompletion.http = true;
+                updateProgress();
+            }
+        }
+
+        function demonstrateClientServer() {
+            const animation = document.getElementById('client-server-animation');
+            animation.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div style="margin: 10px;">
+                        <strong>Client (Your Device)</strong> 📱
+                        <ul style="list-style: none; padding: 0;">
+                            <li>• Sends requests</li>
+                            <li>• Displays content</li>
+                            <li>• Stores cookies</li>
+                        </ul>
+                    </div>
+                    <div style="margin: 10px;">⟷ Internet ☁️ ⟷</div>
+                    <div style="margin: 10px;">
+                        <strong>Server</strong> 🖥️
+                        <ul style="list-style: none; padding: 0;">
+                            <li>• Processes requests</li>
+                            <li>• Stores data</li>
+                            <li>• Sends responses</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            animation.style.display = 'block';
+            if (!sectionCompletion.clientServer) {
+                sectionCompletion.clientServer = true;
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const completedSections = Object.values(sectionCompletion).filter(Boolean).length;
+            const totalSections = Object.keys(sectionCompletion).length;
+            currentProgress = (completedSections / totalSections) * 100;
+            document.getElementById('progressBar').style.width = `${currentProgress}%`;
+        }
+
+        // Initial setup
+        updateContent();
+    </script>
+</body>
+</html> 

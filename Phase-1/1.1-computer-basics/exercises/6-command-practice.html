@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Practice (کمانڈ پریکٹس)</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .terminal {
+            background-color: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            min-height: 300px;
+            overflow-y: auto;
+            position: relative;
+        }
+        .terminal-line {
+            margin: 5px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .prompt::before {
+            content: "$ ";
+            color: #00ff00;
+        }
+        .command-input {
+            background-color: transparent;
+            border: none;
+            color: #00ff00;
+            width: 80%;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            outline: none;
+        }
+        .instructions {
+            background-color: #e1f5fe;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .task {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .help-panel {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .error {
+            color: #ff0000;
+        }
+        .success {
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">Command Line Practice (کمانڈ لائن پریکٹس)</h1>
+
+        <div class="instructions" id="instructions">
+            <h2>Instructions (ہدایات):</h2>
+            <p>Practice basic command line operations. Type commands to complete the tasks.</p>
+            <p>بنیادی کمانڈ لائن آپریشنز کی مشق کریں۔ کام مکمل کرنے کے لیے کمانڈز ٹائپ کریں۔</p>
+        </div>
+
+        <div class="task" id="currentTask">
+            <h3>Current Task (موجودہ کام):</h3>
+            <p id="taskDescription">List all files in the current directory using 'ls' command</p>
+        </div>
+
+        <div class="terminal" id="terminal">
+            <div id="output"></div>
+            <div class="prompt">
+                <input type="text" class="command-input" id="commandInput" placeholder="Type your command here..." onkeypress="handleKeyPress(event)">
+            </div>
+        </div>
+
+        <div class="help-panel" id="helpPanel">
+            <h3>Available Commands (دستیاب کمانڈز):</h3>
+            <ul>
+                <li>ls - List files (فائلیں دکھائیں)</li>
+                <li>cd [folder] - Change directory (فولڈر تبدیل کریں)</li>
+                <li>mkdir [name] - Create directory (فولڈر بنائیں)</li>
+                <li>pwd - Show current path (موجودہ پاتھ دکھائیں)</li>
+                <li>clear - Clear screen (سکرین صاف کریں)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let currentTaskIndex = 0;
+        let virtualFileSystem = {
+            '/': {
+                type: 'dir',
+                contents: {
+                    'Documents': {
+                        type: 'dir',
+                        contents: {}
+                    },
+                    'Pictures': {
+                        type: 'dir',
+                        contents: {}
+                    },
+                    'notes.txt': {
+                        type: 'file',
+                        contents: 'Welcome to command practice!'
+                    }
+                }
+            }
+        };
+        let currentPath = '/';
+
+        const tasks = [
+            {
+                en: "List all files in the current directory using 'ls' command",
+                ur: "'ls' کمانڈ کا استعمال کرتے ہوئے موجودہ فولڈر کی تمام فائلیں دکھائیں",
+                check: (cmd) => cmd.trim() === 'ls'
+            },
+            {
+                en: "Create a new directory named 'Downloads' using 'mkdir' command",
+                ur: "'mkdir' کمانڈ کا استعمال کرتے ہوئے 'Downloads' کے نام سے نیا فولڈر بنائیں",
+                check: (cmd) => cmd.trim() === 'mkdir Downloads'
+            },
+            {
+                en: "Change to the Documents directory using 'cd' command",
+                ur: "'cd' کمانڈ کا استعمال کرتے ہوئے Documents فولڈر میں جائیں",
+                check: (cmd) => cmd.trim() === 'cd Documents'
+            }
+        ];
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const title = document.getElementById('title');
+            const instructions = document.getElementById('instructions');
+            const taskDesc = document.getElementById('taskDescription');
+            
+            if (isEnglish) {
+                title.innerHTML = 'Command Line Practice (کمانڈ لائن پریکٹس)';
+                taskDesc.textContent = tasks[currentTaskIndex].en;
+            } else {
+                title.innerHTML = 'کمانڈ لائن پریکٹس';
+                taskDesc.textContent = tasks[currentTaskIndex].ur;
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                const command = document.getElementById('commandInput').value;
+                executeCommand(command);
+                document.getElementById('commandInput').value = '';
+            }
+        }
+
+        function executeCommand(command) {
+            addToOutput(`$ ${command}`);
+            
+            const cmd = command.toLowerCase().trim();
+            
+            if (cmd === 'ls') {
+                const currentDir = getDirectoryFromPath(currentPath);
+                const contents = Object.keys(currentDir.contents).join('  ');
+                addToOutput(contents || '(empty directory)');
+            } else if (cmd.startsWith('cd ')) {
+                const target = cmd.split(' ')[1];
+                const currentDir = getDirectoryFromPath(currentPath);
+                if (target === '..') {
+                    if (currentPath !== '/') {
+                        currentPath = currentPath.split('/').slice(0, -2).join('/') + '/';
+                    }
+                } else if (currentDir.contents[target] && currentDir.contents[target].type === 'dir') {
+                    currentPath += target + '/';
+                } else {
+                    addToOutput('Directory not found', 'error');
+                }
+            } else if (cmd.startsWith('mkdir ')) {
+                const name = cmd.split(' ')[1];
+                const currentDir = getDirectoryFromPath(currentPath);
+                if (!currentDir.contents[name]) {
+                    currentDir.contents[name] = {
+                        type: 'dir',
+                        contents: {}
+                    };
+                    addToOutput(`Directory '${name}' created`);
+                } else {
+                    addToOutput('Directory already exists', 'error');
+                }
+            } else if (cmd === 'pwd') {
+                addToOutput(currentPath);
+            } else if (cmd === 'clear') {
+                document.getElementById('output').innerHTML = '';
+            } else {
+                addToOutput('Command not found', 'error');
+            }
+
+            // Check if task is completed
+            if (tasks[currentTaskIndex].check(command)) {
+                addToOutput('✓ Task completed! (کام مکمل ہو گیا)', 'success');
+                currentTaskIndex = (currentTaskIndex + 1) % tasks.length;
+                updateLanguage();
+            }
+        }
+
+        function getDirectoryFromPath(path) {
+            let current = virtualFileSystem['/'];
+            if (path === '/') return current;
+            
+            const parts = path.split('/').filter(p => p);
+            for (const part of parts) {
+                current = current.contents[part];
+            }
+            return current;
+        }
+
+        function addToOutput(text, className = '') {
+            const output = document.getElementById('output');
+            const line = document.createElement('div');
+            line.className = `terminal-line ${className}`;
+            line.textContent = text;
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Initial setup
+        updateLanguage();
+    </script>
+</body>
+</html> 

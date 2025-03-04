@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Basics (ای میل کی بنیادی باتیں)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .email-interface {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 20px 0;
+            background-color: #fff;
+        }
+        .email-header {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .email-toolbar {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            gap: 10px;
+        }
+        .email-content {
+            display: flex;
+            min-height: 400px;
+        }
+        .email-sidebar {
+            width: 200px;
+            border-right: 1px solid #ddd;
+            padding: 10px;
+        }
+        .email-main {
+            flex-grow: 1;
+            padding: 10px;
+        }
+        .folder {
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-bottom: 5px;
+        }
+        .folder:hover {
+            background-color: #e9ecef;
+        }
+        .folder.active {
+            background-color: #e1f5fe;
+        }
+        .compose-form {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .email-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .email-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .email-item:hover {
+            background-color: #f8f9fa;
+        }
+        .task-panel {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .feedback {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+        .feedback.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .feedback.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">Email Basics (ای میل کی بنیادی باتیں)</h1>
+
+        <div class="task-panel">
+            <h3 id="current-task">Current Task: Compose a new email</h3>
+            <p id="task-description">Practice creating and sending emails.</p>
+        </div>
+
+        <div class="email-interface">
+            <div class="email-header">
+                <h2>Email Practice (ای میل پریکٹس)</h2>
+            </div>
+            <div class="email-toolbar">
+                <button onclick="showComposeForm()" id="compose-btn">Compose</button>
+                <button onclick="refreshInbox()" id="refresh-btn">Refresh</button>
+                <button onclick="deleteEmail()" id="delete-btn">Delete</button>
+            </div>
+            <div class="email-content">
+                <div class="email-sidebar">
+                    <div class="folder active" onclick="switchFolder('inbox')" id="inbox-folder">Inbox</div>
+                    <div class="folder" onclick="switchFolder('sent')" id="sent-folder">Sent</div>
+                    <div class="folder" onclick="switchFolder('drafts')" id="drafts-folder">Drafts</div>
+                    <div class="folder" onclick="switchFolder('spam')" id="spam-folder">Spam</div>
+                </div>
+                <div class="email-main">
+                    <div class="compose-form" id="compose-form">
+                        <div class="form-group">
+                            <label id="to-label">To:</label>
+                            <input type="text" id="to-input">
+                        </div>
+                        <div class="form-group">
+                            <label id="subject-label">Subject:</label>
+                            <input type="text" id="subject-input">
+                        </div>
+                        <div class="form-group">
+                            <label id="message-label">Message:</label>
+                            <textarea id="message-input" rows="5"></textarea>
+                        </div>
+                        <button onclick="sendEmail()" id="send-btn">Send</button>
+                    </div>
+                    <div class="email-list" id="email-list"></div>
+                </div>
+            </div>
+        </div>
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let currentTask = 0;
+        let currentFolder = 'inbox';
+
+        const tasks = [
+            {
+                en: {
+                    title: "Compose a new email",
+                    description: "Click the Compose button and create a new email to friend@example.com"
+                },
+                ur: {
+                    title: "نیا ای میل لکھیں",
+                    description: "کمپوز بٹن پر کلک کریں اور friend@example.com کو نیا ای میل بنائیں"
+                }
+            },
+            {
+                en: {
+                    title: "Check your Spam folder",
+                    description: "Click on the Spam folder to see potentially dangerous emails"
+                },
+                ur: {
+                    title: "اپنا سپیم فولڈر چیک کریں",
+                    description: "ممکنہ خطرناک ای میلز دیکھنے کے لیے سپیم فولڈر پر کلک کریں"
+                }
+            },
+            {
+                en: {
+                    title: "Delete unwanted emails",
+                    description: "Select an email and click the Delete button"
+                },
+                ur: {
+                    title: "ناپسندیدہ ای میلز کو حذف کریں",
+                    description: "ایک ای میل منتخب کریں اور ڈیلیٹ بٹن پر کلک کریں"
+                }
+            }
+        ];
+
+        const emails = {
+            inbox: [
+                { from: "newsletter@example.com", subject: "Weekly Newsletter", content: "Latest updates..." },
+                { from: "friend@example.com", subject: "Hello!", content: "How are you?" }
+            ],
+            spam: [
+                { from: "scam@fake.com", subject: "You've won!", content: "Claim your prize..." },
+                { from: "virus@malware.com", subject: "Important!", content: "Click here..." }
+            ],
+            sent: [],
+            drafts: []
+        };
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateContent();
+        }
+
+        function updateContent() {
+            const title = document.getElementById('title');
+            const task = tasks[currentTask];
+            
+            if (isEnglish) {
+                title.innerHTML = 'Email Basics (ای میل کی بنیادی باتیں)';
+                document.getElementById('current-task').textContent = 'Current Task: ' + task.en.title;
+                document.getElementById('task-description').textContent = task.en.description;
+                document.getElementById('compose-btn').textContent = 'Compose';
+                document.getElementById('refresh-btn').textContent = 'Refresh';
+                document.getElementById('delete-btn').textContent = 'Delete';
+                document.getElementById('inbox-folder').textContent = 'Inbox';
+                document.getElementById('sent-folder').textContent = 'Sent';
+                document.getElementById('drafts-folder').textContent = 'Drafts';
+                document.getElementById('spam-folder').textContent = 'Spam';
+            } else {
+                title.innerHTML = 'ای میل کی بنیادی باتیں';
+                document.getElementById('current-task').textContent = 'موجودہ کام: ' + task.ur.title;
+                document.getElementById('task-description').textContent = task.ur.description;
+                document.getElementById('compose-btn').textContent = 'تحریر کریں';
+                document.getElementById('refresh-btn').textContent = 'ریفریش';
+                document.getElementById('delete-btn').textContent = 'حذف کریں';
+                document.getElementById('inbox-folder').textContent = 'ان باکس';
+                document.getElementById('sent-folder').textContent = 'بھیجے گئے';
+                document.getElementById('drafts-folder').textContent = 'ڈرافٹس';
+                document.getElementById('spam-folder').textContent = 'سپیم';
+            }
+            
+            updateEmailList();
+        }
+
+        function showComposeForm() {
+            document.getElementById('compose-form').style.display = 'block';
+            if (currentTask === 0) checkTask('compose');
+        }
+
+        function switchFolder(folder) {
+            currentFolder = folder;
+            document.querySelectorAll('.folder').forEach(f => f.classList.remove('active'));
+            document.getElementById(`${folder}-folder`).classList.add('active');
+            updateEmailList();
+            if (currentTask === 1 && folder === 'spam') checkTask('spam');
+        }
+
+        function updateEmailList() {
+            const list = document.getElementById('email-list');
+            list.innerHTML = '';
+            
+            emails[currentFolder].forEach(email => {
+                const div = document.createElement('div');
+                div.className = 'email-item';
+                div.innerHTML = `
+                    <strong>${email.from}</strong><br>
+                    ${email.subject}
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function sendEmail() {
+            const to = document.getElementById('to-input').value;
+            const subject = document.getElementById('subject-input').value;
+            const message = document.getElementById('message-input').value;
+
+            if (to === 'friend@example.com' && subject && message) {
+                emails.sent.push({ from: 'me@example.com', subject, content: message });
+                showFeedback(true, isEnglish ? 'Email sent successfully!' : 'ای میل کامیابی سے بھیج دی گئی!');
+                document.getElementById('compose-form').style.display = 'none';
+                switchFolder('sent');
+                if (currentTask === 0) nextTask();
+            } else {
+                showFeedback(false, isEnglish ? 'Please fill all fields correctly.' : 'براہ کرم تمام فیلڈز درست طریقے سے بھریں۔');
+            }
+        }
+
+        function deleteEmail() {
+            if (emails[currentFolder].length > 0) {
+                emails[currentFolder].pop();
+                updateEmailList();
+                if (currentTask === 2) checkTask('delete');
+            }
+        }
+
+        function showFeedback(success, message) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${success ? 'success' : 'error'}`;
+            feedback.style.display = 'block';
+            setTimeout(() => feedback.style.display = 'none', 3000);
+        }
+
+        function checkTask(action) {
+            switch(currentTask) {
+                case 0:
+                    if (action === 'compose') nextTask();
+                    break;
+                case 1:
+                    if (action === 'spam') nextTask();
+                    break;
+                case 2:
+                    if (action === 'delete') nextTask();
+                    break;
+            }
+        }
+
+        function nextTask() {
+            currentTask = (currentTask + 1) % tasks.length;
+            updateContent();
+            showFeedback(true, isEnglish ? 'Task completed!' : '!کام مکمل ہو گیا');
+        }
+
+        // Initial setup
+        updateContent();
+    </script>
+</body>
+</html> 

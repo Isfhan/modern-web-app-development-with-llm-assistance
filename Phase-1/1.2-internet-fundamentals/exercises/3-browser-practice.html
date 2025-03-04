@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Browser Practice (ویب براؤزر پریکٹس)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .browser-simulation {
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin: 20px 0;
+            background-color: #fff;
+        }
+        .browser-toolbar {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .nav-button {
+            padding: 5px 10px;
+            background-color: #e9ecef;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .address-bar {
+            flex-grow: 1;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            background-color: white;
+        }
+        .browser-content {
+            padding: 20px;
+            min-height: 300px;
+        }
+        .task-panel {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .browser-tab {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #e9ecef;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+        .browser-tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        .bookmark-bar {
+            padding: 5px 10px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+        .bookmark {
+            display: inline-block;
+            padding: 3px 8px;
+            margin-right: 10px;
+            color: #0066cc;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">Web Browser Practice (ویب براؤزر پریکٹس)</h1>
+
+        <div class="task-panel">
+            <h3 id="current-task">Current Task: Click the Back button</h3>
+            <p id="task-description">Practice using browser navigation buttons and features.</p>
+        </div>
+
+        <div class="browser-simulation">
+            <div class="browser-tabs">
+                <div class="browser-tab active">Home Page</div>
+                <div class="browser-tab">New Tab +</div>
+            </div>
+            <div class="browser-toolbar">
+                <div class="nav-buttons">
+                    <button class="nav-button" onclick="handleNavigation('back')">←</button>
+                    <button class="nav-button" onclick="handleNavigation('forward')">→</button>
+                    <button class="nav-button" onclick="handleNavigation('reload')">↻</button>
+                </div>
+                <div class="address-bar" id="addressBar">https://www.example.com</div>
+            </div>
+            <div class="bookmark-bar">
+                <span class="bookmark" onclick="handleBookmark('home')">Home</span>
+                <span class="bookmark" onclick="handleBookmark('search')">Search</span>
+                <span class="bookmark" onclick="handleBookmark('email')">Email</span>
+            </div>
+            <div class="browser-content" id="browserContent">
+                <h2>Welcome to Browser Practice</h2>
+                <p>This is a simulation to help you learn browser navigation.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let currentTaskIndex = 0;
+        let visitedPages = ['home'];
+        let currentPageIndex = 0;
+
+        const tasks = [
+            {
+                en: {
+                    title: "Click the Back button",
+                    description: "Use the back arrow (←) to go to the previous page"
+                },
+                ur: {
+                    title: "بیک بٹن پر کلک کریں",
+                    description: "پچھلے صفحے پر جانے کے لیے بیک ایرو (←) کا استعمال کریں"
+                },
+                check: (action) => action === 'back'
+            },
+            {
+                en: {
+                    title: "Click the Reload button",
+                    description: "Use the reload button (↻) to refresh the page"
+                },
+                ur: {
+                    title: "ری لوڈ بٹن پر کلک کریں",
+                    description: "صفحہ ریفریش کرنے کے لیے ری لوڈ بٹن (↻) کا استعمال کریں"
+                },
+                check: (action) => action === 'reload'
+            },
+            {
+                en: {
+                    title: "Click the Home bookmark",
+                    description: "Click on the Home bookmark in the bookmark bar"
+                },
+                ur: {
+                    title: "ہوم بک مارک پر کلک کریں",
+                    description: "بک مارک بار میں ہوم بک مارک پر کلک کریں"
+                },
+                check: (action) => action === 'home'
+            }
+        ];
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const title = document.getElementById('title');
+            const currentTask = document.getElementById('current-task');
+            const taskDesc = document.getElementById('task-description');
+            const task = tasks[currentTaskIndex];
+            
+            if (isEnglish) {
+                title.innerHTML = 'Web Browser Practice (ویب براؤزر پریکٹس)';
+                currentTask.textContent = 'Current Task: ' + task.en.title;
+                taskDesc.textContent = task.en.description;
+            } else {
+                title.innerHTML = 'ویب براؤزر پریکٹس';
+                currentTask.textContent = 'موجودہ کام: ' + task.ur.title;
+                taskDesc.textContent = task.ur.description;
+            }
+        }
+
+        function handleNavigation(action) {
+            switch(action) {
+                case 'back':
+                    if (currentPageIndex > 0) {
+                        currentPageIndex--;
+                        updateBrowserContent(visitedPages[currentPageIndex]);
+                    }
+                    break;
+                case 'forward':
+                    if (currentPageIndex < visitedPages.length - 1) {
+                        currentPageIndex++;
+                        updateBrowserContent(visitedPages[currentPageIndex]);
+                    }
+                    break;
+                case 'reload':
+                    updateBrowserContent(visitedPages[currentPageIndex]);
+                    break;
+            }
+            checkTask(action);
+        }
+
+        function handleBookmark(page) {
+            visitedPages.splice(currentPageIndex + 1);
+            visitedPages.push(page);
+            currentPageIndex = visitedPages.length - 1;
+            updateBrowserContent(page);
+            checkTask(page);
+        }
+
+        function updateBrowserContent(page) {
+            const content = document.getElementById('browserContent');
+            const addressBar = document.getElementById('addressBar');
+            
+            switch(page) {
+                case 'home':
+                    addressBar.textContent = 'https://www.example.com';
+                    content.innerHTML = '<h2>Welcome to Browser Practice</h2><p>This is a simulation to help you learn browser navigation.</p>';
+                    break;
+                case 'search':
+                    addressBar.textContent = 'https://www.search.example.com';
+                    content.innerHTML = '<h2>Search Page</h2><p>Practice searching the web here.</p>';
+                    break;
+                case 'email':
+                    addressBar.textContent = 'https://www.mail.example.com';
+                    content.innerHTML = '<h2>Email Service</h2><p>Practice checking your email here.</p>';
+                    break;
+            }
+        }
+
+        function checkTask(action) {
+            if (tasks[currentTaskIndex].check(action)) {
+                alert(isEnglish ? 'Good job! Task completed!' : '!شاباش! کام مکمل ہو گیا');
+                currentTaskIndex = (currentTaskIndex + 1) % tasks.length;
+                updateLanguage();
+            }
+        }
+
+        // Initial setup
+        updateLanguage();
+    </script>
+</body>
+</html> 

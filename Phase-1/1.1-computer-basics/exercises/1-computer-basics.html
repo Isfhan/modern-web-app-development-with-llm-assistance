@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Basics (کمپیوٹر کی بنیادی باتیں)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .desktop-simulation {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 400px;
+            position: relative;
+            background-color: #008080;
+        }
+        .window {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #999;
+            border-radius: 5px;
+            width: 300px;
+            min-height: 200px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        .window-header {
+            background-color: #0056b3;
+            color: white;
+            padding: 5px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+        .window-content {
+            padding: 10px;
+        }
+        .desktop-icon {
+            width: 64px;
+            height: 64px;
+            margin: 10px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+        }
+        .desktop-icon img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
+        }
+        .context-menu {
+            position: fixed;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 5px 0;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .context-menu-item {
+            padding: 5px 20px;
+            cursor: pointer;
+        }
+        .context-menu-item:hover {
+            background-color: #e1f5fe;
+        }
+        .task {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .instructions {
+            background-color: #e1f5fe;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+        .start-button {
+            background-color: #0056b3;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">Computer Basics Practice (کمپیوٹر کی بنیادی مشق)</h1>
+
+        <div class="instructions" id="instructions">
+            <h2>Instructions (ہدایات):</h2>
+            <p>Practice basic computer operations like clicking, dragging windows, and using menus.</p>
+            <p>کلک کرنے، ونڈوز کو کھینچنے اور مینو استعمال کرنے جیسے بنیادی کمپیوٹر آپریشنز کی مشق کریں۔</p>
+        </div>
+
+        <div class="task" id="currentTask">
+            <h3>Current Task (موجودہ کام):</h3>
+            <p id="taskDescription">Double-click on the Documents folder</p>
+        </div>
+
+        <div class="desktop-simulation" id="desktop">
+            <!-- Desktop icons -->
+            <div class="desktop-icon" ondblclick="openFolder('Documents')" oncontextmenu="showContextMenu(event, 'Documents')">
+                <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='yellow' d='M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z'/></svg>">
+                <div>Documents</div>
+            </div>
+            <div class="desktop-icon" ondblclick="openFolder('Pictures')" oncontextmenu="showContextMenu(event, 'Pictures')">
+                <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='yellow' d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'/></svg>">
+                <div>Pictures</div>
+            </div>
+
+            <!-- Context menu -->
+            <div class="context-menu" id="contextMenu">
+                <div class="context-menu-item" onclick="handleContextMenu('open')">Open (کھولیں)</div>
+                <div class="context-menu-item" onclick="handleContextMenu('copy')">Copy (کاپی)</div>
+                <div class="context-menu-item" onclick="handleContextMenu('delete')">Delete (حذف)</div>
+            </div>
+
+            <!-- Taskbar -->
+            <div class="taskbar">
+                <div class="start-button" onclick="toggleStartMenu()">Start (شروع)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let currentTaskIndex = 0;
+
+        const tasks = [
+            {
+                en: "Double-click on the Documents folder",
+                ur: "Documents فولڈر پر ڈبل کلک کریں",
+                check: (action) => action === 'open_Documents'
+            },
+            {
+                en: "Right-click on the Pictures folder and select Copy",
+                ur: "Pictures فولڈر پر رائٹ کلک کریں اور Copy منتخب کریں",
+                check: (action) => action === 'copy_Pictures'
+            },
+            {
+                en: "Click the Start button",
+                ur: "Start بٹن پر کلک کریں",
+                check: (action) => action === 'click_start'
+            }
+        ];
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const title = document.getElementById('title');
+            const taskDesc = document.getElementById('taskDescription');
+            
+            if (isEnglish) {
+                title.innerHTML = 'Computer Basics Practice (کمپیوٹر کی بنیادی مشق)';
+                taskDesc.textContent = tasks[currentTaskIndex].en;
+            } else {
+                title.innerHTML = 'کمپیوٹر کی بنیادی مشق';
+                taskDesc.textContent = tasks[currentTaskIndex].ur;
+            }
+        }
+
+        function openFolder(name) {
+            checkTask(`open_${name}`);
+        }
+
+        function showContextMenu(event, name) {
+            event.preventDefault();
+            const menu = document.getElementById('contextMenu');
+            const desktop = document.querySelector('.desktop-simulation');
+            const desktopRect = desktop.getBoundingClientRect();
+            
+            // Calculate available space
+            const menuWidth = 150; // Approximate width of menu
+            const menuHeight = 105; // Approximate height of menu
+            
+            // Get click position relative to viewport
+            let x = event.clientX;
+            let y = event.clientY;
+            
+            // Adjust position if menu would appear outside desktop area
+            if (x + menuWidth > desktopRect.right) {
+                x = desktopRect.right - menuWidth;
+            }
+            if (y + menuHeight > desktopRect.bottom) {
+                y = desktopRect.bottom - menuHeight;
+            }
+            
+            // Keep menu within desktop bounds
+            x = Math.max(desktopRect.left, Math.min(x, desktopRect.right - menuWidth));
+            y = Math.max(desktopRect.top, Math.min(y, desktopRect.bottom - menuHeight));
+            
+            menu.style.left = x + 'px';
+            menu.style.top = y + 'px';
+            menu.dataset.target = name;
+            menu.style.display = 'block';
+        }
+
+        function handleContextMenu(action) {
+            const menu = document.getElementById('contextMenu');
+            const target = menu.dataset.target;
+            menu.style.display = 'none';
+            checkTask(`${action}_${target}`);
+        }
+
+        function toggleStartMenu() {
+            checkTask('click_start');
+        }
+
+        function checkTask(action) {
+            if (tasks[currentTaskIndex].check(action)) {
+                alert(isEnglish ? 'Good job! Task completed!' : '!شاباش! کام مکمل ہو گیا');
+                currentTaskIndex = (currentTaskIndex + 1) % tasks.length;
+                updateLanguage();
+            }
+        }
+
+        // Close context menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('contextMenu');
+            if (!event.target.closest('.context-menu')) {
+                menu.style.display = 'none';
+            }
+        });
+
+        // Initial setup
+        updateLanguage();
+    </script>
+</body>
+</html> 

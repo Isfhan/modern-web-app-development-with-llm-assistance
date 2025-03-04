@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Basics (انٹرنیٹ کی بنیادی باتیں)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .concept-card {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fff;
+            transition: transform 0.3s ease;
+        }
+        .concept-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .interactive-demo {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .network-visualization {
+            text-align: center;
+            padding: 20px;
+        }
+        .device-icon {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            background-color: #e1f5fe;
+            border-radius: 5px;
+        }
+        .connection-line {
+            display: inline-block;
+            width: 50px;
+            height: 2px;
+            background-color: #2196F3;
+            margin: 0 10px;
+        }
+        .quiz-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff3cd;
+            border-radius: 5px;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .quiz-option {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            background-color: #e1f5fe;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">Understanding the Internet (انٹرنیٹ کو سمجھنا)</h1>
+
+        <div class="concept-card">
+            <h2 id="what-is-internet">What is the Internet? (انٹرنیٹ کیا ہے؟)</h2>
+            <p id="internet-definition">The Internet is a global network of computers that allows people to share information and communicate with each other.</p>
+            <p id="internet-definition-ur">انٹرنیٹ کمپیوٹرز کا ایک عالمی نیٹ ورک ہے جو لوگوں کو معلومات کا اشتراک کرنے اور ایک دوسرے سے بات چیت کرنے کی اجازت دیتا ہے۔</p>
+        </div>
+
+        <div class="interactive-demo">
+            <h3 id="network-demo">How Computers Connect (کمپیوٹر کیسے جڑتے ہیں)</h3>
+            <div class="network-visualization">
+                <div class="device-icon">💻</div>
+                <div class="connection-line"></div>
+                <div class="device-icon">🌐</div>
+                <div class="connection-line"></div>
+                <div class="device-icon">📱</div>
+            </div>
+        </div>
+
+        <div class="concept-card">
+            <h2 id="connection-types">Types of Connections (کنکشن کی اقسام)</h2>
+            <ul id="connection-list">
+                <li>Wi-Fi (وائی فائی)</li>
+                <li>Mobile Data (موبائل ڈیٹا)</li>
+                <li>Broadband (براڈبینڈ)</li>
+            </ul>
+        </div>
+
+        <div class="quiz-section">
+            <h2 id="quiz-title">Quick Quiz (فوری کوئز)</h2>
+            <div id="quiz-question"></div>
+            <div id="quiz-options"></div>
+            <button onclick="checkAnswer()">Submit Answer (جواب جمع کریں)</button>
+        </div>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let currentQuestionIndex = 0;
+
+        const questions = [
+            {
+                en: "What is the Internet?",
+                ur: "انٹرنیٹ کیا ہے؟",
+                options: {
+                    en: ["A global network of computers", "A single computer", "A type of website", "A mobile phone"],
+                    ur: ["کمپیوٹرز کا عالمی نیٹ ورک", "ایک کمپیوٹر", "ایک ویب سائٹ کی قسم", "ایک موبائل فون"]
+                },
+                correct: 0
+            },
+            {
+                en: "Which of these is a type of Internet connection?",
+                ur: "ان میں سے کون سا انٹرنیٹ کنکشن کی ایک قسم ہے؟",
+                options: {
+                    en: ["Wi-Fi", "Television", "Radio", "Newspaper"],
+                    ur: ["وائی فائی", "ٹیلی ویژن", "ریڈیو", "اخبار"]
+                },
+                correct: 0
+            }
+        ];
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const title = document.getElementById('title');
+            const internetDef = document.getElementById('internet-definition');
+            const internetDefUr = document.getElementById('internet-definition-ur');
+            
+            if (isEnglish) {
+                title.innerHTML = 'Understanding the Internet (انٹرنیٹ کو سمجھنا)';
+                internetDef.style.display = 'block';
+                internetDefUr.style.display = 'none';
+            } else {
+                title.innerHTML = 'انٹرنیٹ کو سمجھنا';
+                internetDef.style.display = 'none';
+                internetDefUr.style.display = 'block';
+            }
+            
+            updateQuiz();
+        }
+
+        function updateQuiz() {
+            const questionDiv = document.getElementById('quiz-question');
+            const optionsDiv = document.getElementById('quiz-options');
+            const currentQ = questions[currentQuestionIndex];
+            
+            questionDiv.textContent = isEnglish ? currentQ.en : currentQ.ur;
+            
+            optionsDiv.innerHTML = '';
+            const options = isEnglish ? currentQ.options.en : currentQ.options.ur;
+            
+            options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'quiz-option';
+                optionDiv.innerHTML = `
+                    <input type="radio" name="answer" value="${index}">
+                    <label>${option}</label>
+                `;
+                optionsDiv.appendChild(optionDiv);
+            });
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (!selected) {
+                alert(isEnglish ? 'Please select an answer!' : '!براہ کرم ایک جواب منتخب کریں');
+                return;
+            }
+
+            if (parseInt(selected.value) === questions[currentQuestionIndex].correct) {
+                alert(isEnglish ? 'Correct! Well done!' : '!درست! شاباش');
+                currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+                updateQuiz();
+            } else {
+                alert(isEnglish ? 'Try again!' : '!دوبارہ کوشش کریں');
+            }
+        }
+
+        // Initial setup
+        updateLanguage();
+    </script>
+</body>
+</html> 

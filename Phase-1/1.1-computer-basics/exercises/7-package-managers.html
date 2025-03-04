@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package Managers (پیکج مینیجرز)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .terminal-section {
+            background-color: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .command-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+        .command-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .command {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            margin: 5px 0;
+        }
+        .instructions {
+            background-color: #e1f5fe;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .practice-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff3cd;
+            border-radius: 5px;
+        }
+        .task {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">Package Managers (پیکج مینیجرز)</h1>
+
+        <div class="instructions" id="instructions">
+            <h2>What are Package Managers? (پیکج مینیجرز کیا ہیں؟)</h2>
+            <p>Package managers help you install, update, and manage software on your computer.</p>
+            <p>پیکج مینیجرز آپ کے کمپیوٹر پر سافٹ ویئر انسٹال، اپ ڈیٹ اور منظم کرنے میں مدد کرتے ہیں۔</p>
+        </div>
+
+        <div class="command-card">
+            <h3>🪟 Windows - Chocolatey</h3>
+            <div class="command">choco install firefox</div>
+            <p>Installs Firefox browser (فائر فاکس براؤزر انسٹال کرتا ہے)</p>
+            
+            <div class="command">choco upgrade all</div>
+            <p>Updates all installed packages (تمام انسٹال شدہ پیکجز کو اپ ڈیٹ کرتا ہے)</p>
+        </div>
+
+        <div class="command-card">
+            <h3>🍎 macOS - Homebrew</h3>
+            <div class="command">brew install node</div>
+            <p>Installs Node.js (نوڈ جے ایس انسٹال کرتا ہے)</p>
+            
+            <div class="command">brew update</div>
+            <p>Updates Homebrew and its packages (ہوم برو اور اس کے پیکجز کو اپ ڈیٹ کرتا ہے)</p>
+        </div>
+
+        <div class="command-card">
+            <h3>🐧 Linux - APT</h3>
+            <div class="command">sudo apt install git</div>
+            <p>Installs Git (گٹ انسٹال کرتا ہے)</p>
+            
+            <div class="command">sudo apt update && sudo apt upgrade</div>
+            <p>Updates system and installed packages (سسٹم اور انسٹال شدہ پیکجز کو اپ ڈیٹ کرتا ہے)</p>
+        </div>
+
+        <div class="practice-section">
+            <h2 id="practice-title">Practice Exercise (مشق)</h2>
+            <div class="task" id="currentTask">
+                <h3>Current Task (موجودہ کام):</h3>
+                <p id="taskDescription"></p>
+                <input type="text" id="commandInput" placeholder="Type your command here..." style="width: 100%; padding: 10px; margin: 10px 0;">
+                <button onclick="checkCommand()">Submit (جمع کرائیں)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let currentTaskIndex = 0;
+
+        const tasks = [
+            {
+                en: "Write the command to install Firefox using Chocolatey",
+                ur: "چاکلیٹی کا استعمال کرتے ہوئے فائر فاکس انسٹال کرنے کا کمانڈ لکھیں",
+                answer: "choco install firefox"
+            },
+            {
+                en: "Write the command to update all packages in Homebrew",
+                ur: "ہوم برو میں تمام پیکجز کو اپ ڈیٹ کرنے کا کمانڈ لکھیں",
+                answer: "brew update"
+            },
+            {
+                en: "Write the command to install Git on Linux using APT",
+                ur: "اے پی ٹی کا استعمال کرتے ہوئے لینکس پر گٹ انسٹال کرنے کا کمانڈ لکھیں",
+                answer: "sudo apt install git"
+            }
+        ];
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const title = document.getElementById('title');
+            const taskDesc = document.getElementById('taskDescription');
+            
+            if (isEnglish) {
+                title.innerHTML = 'Package Managers (پیکج مینیجرز)';
+                taskDesc.textContent = tasks[currentTaskIndex].en;
+            } else {
+                title.innerHTML = 'پیکج مینیجرز';
+                taskDesc.textContent = tasks[currentTaskIndex].ur;
+            }
+        }
+
+        function checkCommand() {
+            const input = document.getElementById('commandInput').value.trim();
+            if (input === tasks[currentTaskIndex].answer) {
+                alert(isEnglish ? 'Correct! Well done!' : '!درست! شاباش');
+                currentTaskIndex = (currentTaskIndex + 1) % tasks.length;
+                document.getElementById('commandInput').value = '';
+                updateLanguage();
+            } else {
+                alert(isEnglish ? 'Try again!' : '!دوبارہ کوشش کریں');
+            }
+        }
+
+        // Initial setup
+        updateLanguage();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mouse Practice (ماؤس پریکٹس)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .practice-area {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 200px;
+            position: relative;
+        }
+        .target {
+            width: 50px;
+            height: 50px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            position: absolute;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .target:hover {
+            transform: scale(1.1);
+        }
+        .score {
+            font-size: 24px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .instructions {
+            background-color: #e1f5fe;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+        
+        <h1 id="title">Mouse Practice Exercise (ماؤس پریکٹس)</h1>
+        
+        <div class="instructions" id="instructions">
+            <h2>Instructions (ہدایات):</h2>
+            <p>Click on the green circles as they appear. Try to click as many as you can!</p>
+            <p>!سبز دائروں پر کلک کریں جب وہ ظاہر ہوں۔ جتنے زیادہ ہو سکیں کلک کرنے کی کوشش کریں</p>
+        </div>
+
+        <div class="score">
+            Score: <span id="score">0</span>
+        </div>
+
+        <div class="practice-area" id="practiceArea">
+            <div class="target" id="target" onclick="hitTarget()">Click!</div>
+        </div>
+
+        <button onclick="startGame()">Start Game / گیم شروع کریں</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let isEnglish = true;
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const title = document.getElementById('title');
+            const instructions = document.getElementById('instructions');
+            
+            if (isEnglish) {
+                title.innerHTML = 'Mouse Practice Exercise (ماؤس پریکٹس)';
+                instructions.innerHTML = `
+                    <h2>Instructions (ہدایات):</h2>
+                    <p>Click on the green circles as they appear. Try to click as many as you can!</p>
+                    <p>!سبز دائروں پر کلک کریں جب وہ ظاہر ہوں۔ جتنے زیادہ ہو سکیں کلک کرنے کی کوشش کریں</p>
+                `;
+            } else {
+                title.innerHTML = 'ماؤس پریکٹس';
+                instructions.innerHTML = `
+                    <h2>ہدایات:</h2>
+                    <p>!سبز دائروں پر کلک کریں جب وہ ظاہر ہوں۔ جتنے زیادہ ہو سکیں کلک کرنے کی کوشش کریں</p>
+                    <p>Click on the green circles as they appear. Try to click as many as you can!</p>
+                `;
+            }
+        }
+
+        function moveTarget() {
+            const target = document.getElementById('target');
+            const area = document.getElementById('practiceArea');
+            const maxX = area.clientWidth - 50;
+            const maxY = area.clientHeight - 50;
+            
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+            
+            target.style.left = newX + 'px';
+            target.style.top = newY + 'px';
+        }
+
+        function hitTarget() {
+            score++;
+            document.getElementById('score').textContent = score;
+            moveTarget();
+        }
+
+        function startGame() {
+            score = 0;
+            document.getElementById('score').textContent = score;
+            moveTarget();
+        }
+
+        // Initial setup
+        moveTarget();
+    </script>
+</body>
+</html> 

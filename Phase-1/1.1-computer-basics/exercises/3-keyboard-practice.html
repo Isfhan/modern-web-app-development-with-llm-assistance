@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Practice (کی بورڈ پریکٹس)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .practice-area {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 200px;
+            position: relative;
+        }
+        .text-display {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #666;
+            line-height: 1.5;
+        }
+        .text-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e1f5fe;
+            border-radius: 5px;
+        }
+        .stat-box {
+            text-align: center;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        .key {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: default;
+            transition: all 0.2s;
+        }
+        .key.active {
+            background-color: #2196F3;
+            color: white;
+            transform: scale(0.95);
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .correct {
+            color: #4CAF50;
+        }
+        .incorrect {
+            color: #f44336;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">Keyboard Practice (کی بورڈ پریکٹس)</h1>
+
+        <div class="instructions" id="instructions">
+            <h2>Instructions (ہدایات):</h2>
+            <p>Type the text shown below. Practice typing accurately and build speed gradually.</p>
+            <p>نیچے دکھائے گئے متن کو ٹائپ کریں۔ درستگی کے ساتھ ٹائپنگ کی مشق کریں اور آہستہ آہستہ رفتار بڑھائیں۔</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">WPM (رفتار)</div>
+                <div class="stat-value" id="wpm">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Accuracy (درستگی)</div>
+                <div class="stat-value" id="accuracy">100%</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Time (وقت)</div>
+                <div class="stat-value" id="time">0:00</div>
+            </div>
+        </div>
+
+        <div class="practice-area">
+            <div class="text-display" id="textDisplay"></div>
+            <input type="text" class="text-input" id="textInput" placeholder="Start typing here... (یہاں ٹائپ کرنا شروع کریں)" autocomplete="off">
+        </div>
+
+        <div class="keyboard" id="keyboard"></div>
+
+        <button onclick="newText()">New Text / نیا متن</button>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let startTime = null;
+        let timer = null;
+
+        const practiceTexts = {
+            en: [
+                "The quick brown fox jumps over the lazy dog.",
+                "Type as quickly and accurately as you can.",
+                "Practice makes perfect, keep trying!",
+                "Learning to type is an essential computer skill.",
+                "Focus on accuracy first, then build speed."
+            ],
+            ur: [
+                "میں کمپیوٹر پر ٹائپنگ سیکھ رہا ہوں۔",
+                "روزانہ تھوڑی دیر مشق کریں۔",
+                "آہستہ آہستہ رفتار بڑھے گی۔",
+                "غلطیوں سے سیکھنا اچھی بات ہے۔",
+                "مشق سے ہی مہارت آتی ہے۔"
+            ]
+        };
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateLanguage();
+            newText();
+        }
+
+        function updateLanguage() {
+            const title = document.getElementById('title');
+            const instructions = document.getElementById('instructions');
+            
+            if (isEnglish) {
+                title.innerHTML = 'Keyboard Practice (کی بورڈ پریکٹس)';
+                document.getElementById('textInput').placeholder = 'Start typing here... (یہاں ٹائپ کرنا شروع کریں)';
+            } else {
+                title.innerHTML = 'کی بورڈ پریکٹس';
+                document.getElementById('textInput').placeholder = 'یہاں ٹائپ کرنا شروع کریں... (Start typing here)';
+            }
+        }
+
+        function newText() {
+            const texts = isEnglish ? practiceTexts.en : practiceTexts.ur;
+            const randomIndex = Math.floor(Math.random() * texts.length);
+            document.getElementById('textDisplay').textContent = texts[randomIndex];
+            document.getElementById('textInput').value = '';
+            resetStats();
+        }
+
+        function resetStats() {
+            startTime = null;
+            if (timer) clearInterval(timer);
+            document.getElementById('wpm').textContent = '0';
+            document.getElementById('accuracy').textContent = '100%';
+            document.getElementById('time').textContent = '0:00';
+        }
+
+        function updateStats() {
+            if (!startTime) {
+                startTime = new Date();
+                timer = setInterval(updateTime, 1000);
+            }
+
+            const input = document.getElementById('textInput').value;
+            const target = document.getElementById('textDisplay').textContent;
+            
+            // Calculate accuracy
+            let correct = 0;
+            for (let i = 0; i < input.length; i++) {
+                if (input[i] === target[i]) correct++;
+            }
+            const accuracy = input.length === 0 ? 100 : Math.round((correct / input.length) * 100);
+            document.getElementById('accuracy').textContent = accuracy + '%';
+
+            // Calculate WPM
+            const timeElapsed = (new Date() - startTime) / 1000 / 60; // in minutes
+            const words = input.length / 5; // assume average word length of 5
+            const wpm = Math.round(words / timeElapsed);
+            document.getElementById('wpm').textContent = wpm.toString();
+
+            // Update text display with colored feedback
+            const display = document.getElementById('textDisplay');
+            let html = '';
+            for (let i = 0; i < target.length; i++) {
+                if (i < input.length) {
+                    const correct = input[i] === target[i];
+                    html += `<span class="${correct ? 'correct' : 'incorrect'}">${target[i]}</span>`;
+                } else {
+                    html += target[i];
+                }
+            }
+            display.innerHTML = html;
+
+            // Check if completed
+            if (input === target) {
+                clearInterval(timer);
+                alert(isEnglish ? 'Well done! Try another text!' : '!شاباش! دوسرا متن آزمائیں');
+                newText();
+            }
+        }
+
+        function updateTime() {
+            if (!startTime) return;
+            const timeElapsed = Math.round((new Date() - startTime) / 1000);
+            const minutes = Math.floor(timeElapsed / 60);
+            const seconds = timeElapsed % 60;
+            document.getElementById('time').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Create virtual keyboard
+        function createKeyboard() {
+            const keyboard = document.getElementById('keyboard');
+            const keys = 'QWERTYUIOPASDFGHJKLZXCVBNM'.split('');
+            keyboard.innerHTML = '';
+            keys.forEach(key => {
+                const keyElement = document.createElement('div');
+                keyElement.className = 'key';
+                keyElement.textContent = key;
+                keyboard.appendChild(keyElement);
+            });
+        }
+
+        // Event listeners
+        document.getElementById('textInput').addEventListener('input', updateStats);
+        document.addEventListener('keydown', (e) => {
+            const key = document.querySelector(`.key:contains('${e.key.toUpperCase()}')`);
+            if (key) key.classList.add('active');
+        });
+        document.addEventListener('keyup', (e) => {
+            const key = document.querySelector(`.key:contains('${e.key.toUpperCase()}')`);
+            if (key) key.classList.remove('active');
+        });
+
+        // Initial setup
+        createKeyboard();
+        updateLanguage();
+        newText();
+    </script>
+</body>
+</html> 

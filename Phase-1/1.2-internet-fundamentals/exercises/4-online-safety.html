@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Safety Practice (انٹرنیٹ سیفٹی پریکٹس)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .scenario-card {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .scenario-content {
+            margin-bottom: 20px;
+        }
+        .options-container {
+            display: grid;
+            gap: 10px;
+        }
+        .option-button {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.3s;
+            color: #333;
+        }
+        .option-button:hover {
+            background-color: #e9ecef;
+        }
+        .feedback-panel {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .feedback-panel.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .feedback-panel.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #28a745;
+            transition: width 0.3s ease;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1976D2;
+        }
+        .safety-tip {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .password-text {
+            font-family: monospace;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">English/اردو</button>
+        </div>
+
+        <h1 id="title">Internet Safety Practice (انٹرنیٹ سیفٹی پریکٹس)</h1>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+        </div>
+
+        <div class="safety-tip" id="safetyTip">
+            <span class="icon">💡</span>
+            <span id="tipText">Always be careful with your personal information online!</span>
+        </div>
+
+        <div class="scenario-card">
+            <h2 id="scenarioTitle">Scenario</h2>
+            <div class="scenario-content" id="scenarioContent"></div>
+            <div class="options-container" id="options"></div>
+            <div class="feedback-panel" id="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        let isEnglish = true;
+        let currentScenarioIndex = 0;
+
+        const scenarios = [
+            {
+                en: {
+                    title: "Password Security",
+                    content: "You need to create a new password for your email account. Which of these is the safest?",
+                    options: [
+                        { text: "123456", correct: false },
+                        { text: "password123", correct: false },
+                        { text: '<span class="password-text">StrongP@ssw0rd2024!</span>', correct: true },
+                        { text: "your birthday", correct: false }
+                    ],
+                    feedback: {
+                        correct: "Excellent! A strong password should include numbers, special characters, and both upper and lower case letters.",
+                        incorrect: "This password is not secure enough. Use a mix of numbers, special characters, and both upper and lower case letters."
+                    },
+                    tip: "Never use common words or personal information in your passwords."
+                },
+                ur: {
+                    title: "پاس ورڈ سیکیورٹی",
+                    content: "آپ کو اپنے ای میل اکاؤنٹ کے لیے ایک نیا پاس ورڈ بنانا ہے۔ ان میں سے کون سا سب سے محفوظ ہے؟",
+                    options: [
+                        { text: "123456", correct: false },
+                        { text: "password123", correct: false },
+                        { text: '<span class="password-text">StrongP@ssw0rd2024!</span>', correct: true },
+                        { text: "آپ کی پیدائش کی تاریخ", correct: false }
+                    ],
+                    feedback: {
+                        correct: "شاندار! ایک مضبوط پاس ورڈ میں نمبر، خصوصی حروف، اور بڑے اور چھوٹے حروف شامل ہونے چاہئیں۔",
+                        incorrect: "یہ پاس ورڈ کافی محفوظ نہیں ہے۔ نمبر، خصوصی حروف، اور بڑے اور چھوٹے حروف کا مرکب استعمال کریں۔"
+                    },
+                    tip: "کبھی بھی اپنے پاس ورڈ میں عام الفاظ یا ذاتی معلومات استعمال نہ کریں۔"
+                }
+            },
+            {
+                en: {
+                    title: "Email Safety",
+                    content: "You receive an email saying you've won a lottery and need to provide your bank details to claim the prize. What should you do?",
+                    options: [
+                        { text: "Reply with your bank details", correct: false },
+                        { text: "Delete the email immediately", correct: true },
+                        { text: "Click on any links in the email", correct: false },
+                        { text: "Forward it to friends", correct: false }
+                    ],
+                    feedback: {
+                        correct: "Great decision! Such emails are usually scams. Never share your banking information through email.",
+                        incorrect: "This could be dangerous! Lottery scam emails are common. Never share financial information through email."
+                    },
+                    tip: "Be suspicious of any unexpected prizes or requests for financial information."
+                },
+                ur: {
+                    title: "ای میل سیفٹی",
+                    content: "آپ کو ایک ای میل موصول ہوتی ہے جس میں کہا گیا ہے کہ آپ نے لاٹری جیتی ہے اور انعام حاصل کرنے کے لیے اپنی بینک کی تفصیلات فراہم کرنے کی ضرورت ہے۔ آپ کو کیا کرنا چاہیے؟",
+                    options: [
+                        { text: "اپنی بینک کی تفصیلات کے ساتھ جواب دیں", correct: false },
+                        { text: "ای میل کو فوراً حذف کر دیں", correct: true },
+                        { text: "ای میل میں موجود کسی بھی لنک پر کلک کریں", correct: false },
+                        { text: "اسے دوستوں کو فارورڈ کریں", correct: false }
+                    ],
+                    feedback: {
+                        correct: "بہترین فیصلہ! ایسی ای میلز عام طور پر دھوکہ دہی ہوتی ہیں۔ کبھی بھی ای میل کے ذریعے اپنی بینکنگ معلومات شیئر نہ کریں۔",
+                        incorrect: "یہ خطرناک ہو سکتا ہے! لاٹری کی دھوکہ دہی والی ای میلز عام ہیں۔ کبھی بھی ای میل کے ذریعے مالی معلومات شیئر نہ کریں۔"
+                    },
+                    tip: "کسی بھی غیر متوقع انعام یا مالی معلومات کی درخواست پر شک کریں۔"
+                }
+            },
+            {
+                en: {
+                    title: "Social Media Privacy",
+                    content: "A stranger sends you a friend request on social media. They have a nice profile picture. What's the safe action?",
+                    options: [
+                        { text: "Accept immediately", correct: false },
+                        { text: "Share your personal information", correct: false },
+                        { text: "Ignore/Block the request", correct: true },
+                        { text: "Ask them for their phone number", correct: false }
+                    ],
+                    feedback: {
+                        correct: "Perfect! It's safest to only connect with people you know in real life.",
+                        incorrect: "Be careful! Accepting unknown friend requests can be dangerous."
+                    },
+                    tip: "Keep your social media profiles private and only connect with people you know personally."
+                },
+                ur: {
+                    title: "سوشل میڈیا پرائیویسی",
+                    content: "ایک اجنبی آپ کو سوشل میڈیا پر دوستی کی درخواست بھیجتا ہے۔ ان کی پروفائل تصویر اچھی ہے۔ محفوظ عمل کیا ہے؟",
+                    options: [
+                        { text: "فوراً قبول کریں", correct: false },
+                        { text: "اپنی ذاتی معلومات شیئر کریں", correct: false },
+                        { text: "درخواست کو نظر انداز/بلاک کریں", correct: true },
+                        { text: "ان سے ان کا فون نمبر پوچھیں", correct: false }
+                    ],
+                    feedback: {
+                        correct: "بالکل درست! صرف ان لوگوں سے جڑنا سب سے محفوظ ہے جنہیں آپ حقیقی زندگی میں جانتے ہیں۔",
+                        incorrect: "محتاط رہیں! نامعلوم دوستی کی درخواستیں قبول کرنا خطرناک ہو سکتا ہے۔"
+                    },
+                    tip: "اپنی سوشل میڈیا پروفائلز کو پرائیویٹ رکھیں اور صرف ان لوگوں سے جڑیں جنہیں آپ ذاتی طور پر جانتے ہیں۔"
+                }
+            }
+        ];
+
+        function toggleLanguage() {
+            isEnglish = !isEnglish;
+            updateContent();
+        }
+
+        function updateContent() {
+            const title = document.getElementById('title');
+            const scenario = scenarios[currentScenarioIndex];
+            const content = isEnglish ? scenario.en : scenario.ur;
+            
+            title.innerHTML = isEnglish ? 
+                'Internet Safety Practice (انٹرنیٹ سیفٹی پریکٹس)' : 
+                'انٹرنیٹ سیفٹی پریکٹس';
+            
+            document.getElementById('scenarioTitle').textContent = content.title;
+            document.getElementById('scenarioContent').textContent = content.content;
+            document.getElementById('tipText').textContent = content.tip;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            content.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.innerHTML = option.text;
+                button.onclick = () => checkAnswer(index, option.correct);
+                optionsContainer.appendChild(button);
+            });
+
+            document.getElementById('feedback').style.display = 'none';
+            updateProgress();
+        }
+
+        function checkAnswer(index, isCorrect) {
+            const feedback = document.getElementById('feedback');
+            const scenario = scenarios[currentScenarioIndex];
+            const content = isEnglish ? scenario.en : scenario.ur;
+            
+            feedback.textContent = isCorrect ? content.feedback.correct : content.feedback.incorrect;
+            feedback.className = `feedback-panel ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.style.display = 'block';
+
+            if (isCorrect) {
+                setTimeout(() => {
+                    currentScenarioIndex = (currentScenarioIndex + 1) % scenarios.length;
+                    updateContent();
+                }, 2000);
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentScenarioIndex) / scenarios.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Initial setup
+        updateContent();
+    </script>
+</body>
+</html> 
